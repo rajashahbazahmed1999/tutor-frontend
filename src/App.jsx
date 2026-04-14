@@ -12,9 +12,9 @@ import MyProfile from './pages/MyProfile'
 import MySessions from './pages/MySessions'
 import Verify from './pages/Verify'
 import Session from './pages/Session'
-import Signup from './pages/SignUp'
 import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
+import SignUp from './pages/Signup'
 
 function App() {
   const location = useLocation();
@@ -33,7 +33,7 @@ function App() {
      
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup" element={<SignUp />} />
 
           <Route
             path="/dashboard"
