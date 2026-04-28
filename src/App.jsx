@@ -7,7 +7,7 @@ import Home from './pages/Home'
 import Tutors from './pages/Tutors'
 import Blog from './pages/Blog'
 import Login from './pages/Login'
-import Contact from './pages/Contact'
+// import Contact from './pages/Contact'
 import MyProfile from './pages/MyProfile'
 import MySessions from './pages/MySessions'
 import Verify from './pages/Verify'
@@ -50,7 +50,7 @@ function App() {
 
           
           <Route path="/blog" element={<Blog />} />
-          <Route path="/contact" element={<Contact />} />
+          {/* <Route path="/contact" element={<Contact />} /> */}
 
        
           <Route
