@@ -1,13 +1,45 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import API from "../api/api";
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+
+    console.log({
+  email,
+  username,
+  password
+});
+    
     e.preventDefault();
-    console.log({ email, username, password });
+
+    
+    if (!email || !username || !password) {
+      alert("All fields are required");
+      return;
+    }
+
+    try {
+      const res = await API.post("/auth/signup", {
+        name: username,   // ⚠️ backend expects "name"
+        email,
+        password
+      });
+
+      alert("Account created successfully");
+
+      // 🚀 redirect to login
+      navigate("/login");
+
+    } catch (err) {
+      alert(err.response?.data?.msg || "Signup failed");
+    }
   };
 
   return (
@@ -20,12 +52,11 @@ function SignUp() {
         </h2>
 
         <p className="text-gray-500 text-sm text-center mb-6">
-          Create a account to continue
+          Create an account to continue
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
-       
           <div>
             <label className="text-sm text-gray-600">Email address:</label>
             <input
@@ -37,7 +68,6 @@ function SignUp() {
             />
           </div>
 
-          
           <div>
             <label className="text-sm text-gray-600">Username</label>
             <input
@@ -49,7 +79,6 @@ function SignUp() {
             />
           </div>
 
-          
           <div>
             <div className="flex justify-between text-sm text-gray-600">
               <label>Password</label>
@@ -65,13 +94,11 @@ function SignUp() {
             />
           </div>
 
-        
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <input type="checkbox"/>
             <span>I accept terms and conditions</span>
           </div>
 
-         
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import API from "../api/api";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -7,78 +8,73 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (email === "admin@gmail.com" && password === "12345") {
-      localStorage.setItem("token", "adminToken");
-      localStorage.setItem("role", "admin");
+    try {
+      const res = await API.post("/auth/login", {
+        email,
+        password
+      });
+
+      // 🔐 save token
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.user.role);
+
+      alert("Login successful");
 
       navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+
+    } catch (err) {
+      alert(err.response?.data?.msg || "Invalid credentials");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-200 to-blue-600">
       <div className="bg-white w-[420px] p-8 rounded-2xl shadow-xl">
+
         <h2 className="text-2xl font-semibold text-center mb-2">
           Login to Account
         </h2>
 
         <p className="text-gray-500 text-sm text-center mb-6">
-          Please enter your email and password to continue
+          Enter your credentials
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
           <div>
             <label className="text-sm text-gray-600">Email address:</label>
             <input
               type="email"
               placeholder="example@gmail.com"
-              className="w-full mt-1 p-3 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-3 border rounded-lg bg-gray-100"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </div>
 
           <div>
-            <div className="flex justify-between text-sm text-gray-600">
-              <label>Password</label>
-              <span className="text-gray-500 cursor-pointer hover:text-blue-500">
-                Forget Password?
-              </span>
-            </div>
-
+            <label className="text-sm text-gray-600">Password</label>
             <input
               type="password"
               placeholder="••••••••"
-              className="w-full mt-1 p-3 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-3 border rounded-lg bg-gray-100"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e)=>setPassword(e.target.value)}
             />
-          </div>
-
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <input type="checkbox" />
-            <span>Remember Password</span>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
+            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
           >
-            Sign In
+            Login
           </button>
+
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-500 hover:underline">
-            Create Account
-          </Link>
-        </p>
       </div>
     </div>
   );
