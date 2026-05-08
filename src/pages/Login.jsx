@@ -6,27 +6,37 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!email.trim() || !password.trim()) {
+      setError("Email and Password are required");
+      return;
+    }
+
     try {
+      setError("");
+
       const res = await API.post("/auth/login", {
         email,
         password
       });
 
-      // 🔐 save token
+ 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.user.role);
 
-      alert("Login successful");
+      
 
       navigate("/dashboard");
 
     } catch (err) {
-      alert(err.response?.data?.msg || "Invalid credentials");
+      setError(err.response?.data?.msg || "Invalid credentials");
     }
   };
 
@@ -42,6 +52,12 @@ function Login() {
           Enter your credentials
         </p>
 
+        {error && (
+          <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm mb-4">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
 
           <div>
@@ -49,7 +65,7 @@ function Login() {
             <input
               type="email"
               placeholder="example@gmail.com"
-              className="w-full mt-1 p-3 border rounded-lg bg-gray-100"
+              className="w-full mt-1 p-3 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={email}
               onChange={(e)=>setEmail(e.target.value)}
             />
@@ -60,7 +76,7 @@ function Login() {
             <input
               type="password"
               placeholder="••••••••"
-              className="w-full mt-1 p-3 border rounded-lg bg-gray-100"
+              className="w-full mt-1 p-3 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
             />
@@ -68,7 +84,7 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
+            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
           >
             Login
           </button>
