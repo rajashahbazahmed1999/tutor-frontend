@@ -3,6 +3,11 @@ import { useParams } from "react-router-dom";
 function Session() {
   const { tutId } = useParams();
 
+  const submitBooking = (e) => {
+    e.preventDefault();
+    alert(`Booking confirmed for Tutor #${tutId}`);
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
@@ -12,7 +17,7 @@ function Session() {
           Book Session with Tutor #{tutId}
         </h2>
 
-        <form className="space-y-4">
+        <form onSubmit={submitBooking} className="space-y-4">
 
           <input
             type="date"

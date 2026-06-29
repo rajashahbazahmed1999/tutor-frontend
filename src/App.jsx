@@ -15,6 +15,7 @@ import Session from './pages/Session'
 import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import SignUp from './pages/Signup'
+import Payment from './components/Payment'
 
 function App() {
   const location = useLocation();
@@ -82,6 +83,9 @@ function App() {
 
           
           <Route path="/session/:tutId" element={<Session />} />
+          <Route path="/payment" element={<Payment />} />
+      
+
 
         </Routes>
       </div>
