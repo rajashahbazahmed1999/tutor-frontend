@@ -34,7 +34,7 @@ function SignUp() {
 
       alert("Account created successfully");
 
-      // 🚀 redirect to login
+      
       navigate("/login");
 
     } catch (err) {
